@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>منصة التسجيل في برنامج الرحلة</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* ===== لوحة الألوان (من الصورة) ===== */
+  --teal:#25C5C2;
+  --green:#6FB92E;
+  --dark:#102E27;
+  --mint:#53D6A1;
+  --soft:#DAE3DB;
+
+  /* ===== مشتقات ===== */
+  --bg:#FFFFFF;
+  --panel:#FFFFFF;
+  --tint:#F4FAF7;
+  --tint2:#EEF7F1;
+  --line:#E7EFE9;
+  --text:#102E27;
+  --text-soft:#5B6F67;
+  --text-mute:#8A9A92;
+
+  --grad-hero:linear-gradient(135deg,#25C5C2 0%,#53D6A1 52%,#6FB92E 100%);
+  --grad-btn:linear-gradient(135deg,#25C5C2 0%,#53D6A1 100%);
+  --grad-btn-green:linear-gradient(135deg,#53D6A1 0%,#6FB92E 100%);
+  --grad-soft:linear-gradient(135deg,#EAF8F3 0%,#F0F8E9 100%);
+
+  --r-xl:28px;
+  --r-lg:22px;
+  --r-md:16px;
+  --r-sm:12px;
+
+  --shadow:0 10px 40px -12px rgba(16,46,39,.16);
+  --shadow-sm:0 4px 18px -8px rgba(16,46,39,.18);
+  --shadow-lg:0 24px 70px -22px rgba(16,46,39,.28);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family:'Cairo',system-ui,sans-serif;
+  background:
+    radial-gradient(1200px 600px at 100% -10%, rgba(83,214,161,.10), transparent 60%),
+    radial-gradient(1000px 600px at -10% 0%, rgba(37,197,194,.10), transparent 55%),
+    var(--bg);
+  color:var(--text);
+  -webkit-font-smoothing:antialiased;
+  line-height:1.7;
+  min-height:100vh;
+}
+button{font-family:inherit;cursor:pointer}
+input,select,textarea{font-family:inherit}
+a{color:inherit}
+
+/* ============ شريط علوي ============ */
+.topbar{
+  position:sticky;top:0;z-index:40;
+  backdrop-filter:saturate(160%) blur(14px);
+  background:rgba(255,255,255,.82);
+  border-bottom:1px solid var(--line);
+}
+.topbar-in{
+  max-width:1120px;margin:0 auto;padding:14px 22px;
+  display:flex;align-items:center;justify-content:space-between;gap:14px;
+}
+.brand{display:flex;align-items:center;gap:12px;min-width:0}
+.logo{
+  width:46px;height:46px;border-radius:15px;flex:none;
+  background:var(--grad-hero);
+  display:grid;place-items:center;color:#fff;
+  box-shadow:0 8px 22px -8px rgba(37,197,194,.7);
+  overflow:hidden;
+}
+.logo svg{width:26px;height:26px}
+.logo img{width:100%;height:100%;object-fit:cover}
+.brand-txt{min-width:0}
+.brand-txt h1{font-size:18px;font-weight:800;letter-spacing:-.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand-txt p{font-size:12.5px;color:var(--text-mute);font-weight:500;margin-top:-2px}
+.nav-btn{
+  border:1px solid var(--line);background:#fff;color:var(--text-soft);
+  padding:9px 16px;border-radius:999px;font-size:13.5px;font-weight:600;
+  display:inline-flex;align-items:center;gap:7px;transition:.15s;
+}
+.nav-btn:hover{border-color:var(--mint);color:var(--dark);background:var(--tint)}
+.nav-btn svg{width:16px;height:16px}
+
+/* ============ حاوية ============ */
+.wrap{max-width:1120px;margin:0 auto;padding:30px 22px 70px}
+.wrap-narrow{max-width:760px}
+
+/* ============ بطاقة إعلان الرحلة ============ */
+.hero{
+  border-radius:var(--r-xl);overflow:hidden;position:relative;
+  background:var(--grad-hero);color:#fff;
+  box-shadow:var(--shadow-lg);margin-bottom:26px;
+}
+.hero-media{position:relative;min-height:230px}
+.hero-media img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;min-height:230px}
+.hero-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(180deg, rgba(16,46,39,.05) 0%, rgba(16,46,39,.55) 100%);
+}
+.hero-body{position:relative;padding:30px 32px 34px}
+.hero-tag{
+  display:inline-flex;align-items:center;gap:7px;
+  background:rgba(255,255,255,.22);border:1px solid rgba(255,255,255,.35);
+  padding:6px 14px;border-radius:999px;font-size:12.5px;font-weight:700;
+  backdrop-filter:blur(4px);margin-bottom:14px;
+}
+.hero-tag svg{width:15px;height:15px}
+.hero h2{font-size:30px;font-weight:800;line-height:1.25;letter-spacing:-.4px;text-shadow:0 2px 14px rgba(16,46,39,.25)}
+.hero p{font-size:15.5px;margin-top:10px;max-width:600px;opacity:.96;text-shadow:0 1px 8px rgba(16,46,39,.2)}
+.hero-when{
+  display:flex;flex-wrap:wrap;gap:10px;margin-top:18px;
+}
+.chip{
+  display:inline-flex;align-items:center;gap:7px;
+  background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.3);
+  padding:8px 14px;border-radius:14px;font-size:13px;font-weight:600;backdrop-filter:blur(4px);
+}
+.chip svg{width:15px;height:15px}
+
+/* ============ بطاقة النموذج ============ */
+.card{
+  background:var(--panel);border:1px solid var(--line);
+  border-radius:var(--r-xl);box-shadow:var(--shadow);
+  padding:30px 30px 34px;
+}
+.card-head{margin-bottom:24px}
+.card-head .eyebrow{
+  display:inline-flex;align-items:center;gap:7px;
+  background:var(--grad-soft);color:#0f7a5e;border:1px solid #d4efe4;
+  padding:5px 13px;border-radius:999px;font-size:12px;font-weight:700;margin-bottom:12px;
+}
+.card-head .eyebrow svg{width:15px;height:15px}
+.card-head h3{font-size:23px;font-weight:800;letter-spacing:-.3px}
+.card-head p{color:var(--text-soft);font-size:14px;margin-top:5px}
+
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px 18px}
+.field{display:flex;flex-direction:column;gap:7px}
+.field.col-2{grid-column:1 / -1}
+.field label{font-size:13.5px;font-weight:700;color:var(--dark);display:flex;align-items:center;gap:6px}
+.field label .req{color:#e0533f;font-weight:800}
+.field .hint{font-size:11.5px;color:var(--text-mute);font-weight:500}
+.field input,.field select,.field textarea{
+  width:100%;padding:13px 15px;border-radius:var(--r-sm);
+  border:1.5px solid var(--line);background:#fff;color:var(--text);
+  font-size:14.5px;transition:.15s;outline:none;
+}
+.field textarea{resize:vertical;min-height:84px}
+.field input::placeholder,.field textarea::placeholder{color:#b3c1b9}
+.field input:hover,.field select:hover,.field textarea:hover{border-color:#cfe3d8}
+.field input:focus,.field select:focus,.field textarea:focus{
+  border-color:var(--mint);box-shadow:0 0 0 4px rgba(83,214,161,.16);
+}
+.field.invalid input,.field.invalid select,.field.invalid textarea{
+  border-color:#e8a99e;background:#fff7f5;
+}
+.err-msg{font-size:11.5px;color:#d9533f;font-weight:600;display:none;align-items:center;gap:5px}
+.field.invalid .err-msg{display:flex}
+
+.phone-wrap{position:relative}
+.phone-wrap input{padding-left:15px;padding-right:15px}
+
+/* تعهد */
+.pledge{
+  margin-top:22px;background:var(--tint);border:1.5px solid var(--line);
+  border-radius:var(--r-md);padding:18px 20px;
+}
+.pledge-row{display:flex;gap:13px;align-items:flex-start}
+.cbox{
+  width:24px;height:24px;flex:none;border-radius:8px;border:2px solid #c2d6cb;
+  background:#fff;display:grid;place-items:center;margin-top:2px;transition:.15s;cursor:pointer;
+}
+.cbox svg{width:15px;height:15px;color:#fff;opacity:0;transform:scale(.5);transition:.15s}
+.cbox.on{background:var(--grad-btn-green);border-color:transparent}
+.cbox.on svg{opacity:1;transform:scale(1)}
+.pledge-txt{font-size:13.5px;color:var(--text-soft);line-height:1.75}
+.pledge-txt b{color:var(--dark);font-weight:700;display:block;margin-bottom:3px}
+.field.invalid.pledge-field .cbox{border-color:#e8a99e}
+
+.submit-btn{
+  margin-top:26px;width:100%;border:none;color:#fff;font-size:16px;font-weight:800;
+  padding:16px;border-radius:var(--r-md);background:var(--grad-btn);
+  box-shadow:0 14px 30px -12px rgba(37,197,194,.65);
+  display:flex;align-items:center;justify-content:center;gap:9px;transition:.18s;
+}
+.submit-btn:hover{transform:translateY(-1px);box-shadow:0 18px 38px -12px rgba(37,197,194,.75)}
+.submit-btn:active{transform:translateY(0)}
+.submit-btn:disabled{opacity:.6;cursor:not-allowed;transform:none}
+.submit-btn svg{width:19px;height:19px}
+
+/* ============ شاشة الشكر / القبول ============ */
+.success{text-align:center;padding:10px 6px 6px}
+.success-badge{
+  width:96px;height:96px;border-radius:32px;margin:6px auto 22px;
+  background:var(--grad-btn-green);display:grid;place-items:center;color:#fff;
+  box-shadow:0 18px 44px -14px rgba(111,185,46,.6);
+  animation:pop .5s cubic-bezier(.18,.9,.3,1.3) both;
+}
+.success-badge svg{width:50px;height:50px}
+@keyframes pop{0%{transform:scale(.4);opacity:0}100%{transform:scale(1);opacity:1}}
+.success h3{font-size:26px;font-weight:800;letter-spacing:-.3px}
+.success .name{
+  display:inline-block;margin-top:6px;background:var(--grad-soft);
+  color:#0f7a5e;font-weight:800;padding:6px 18px;border-radius:999px;font-size:16px;border:1px solid #d4efe4;
+}
+.success .msg{color:var(--text-soft);font-size:15px;margin:18px auto 0;max-width:480px;line-height:1.8}
+.success .ref{
+  margin-top:22px;display:inline-flex;align-items:center;gap:8px;
+  background:var(--tint);border:1px dashed #c2d6cb;border-radius:14px;
+  padding:10px 18px;font-size:13.5px;color:var(--text-soft);font-weight:600;
+}
+.success .ref b{color:var(--dark);font-family:'Cairo';letter-spacing:1px}
+.success-again{
+  margin-top:26px;background:#fff;border:1px solid var(--line);color:var(--text-soft);
+  padding:11px 22px;border-radius:999px;font-weight:700;font-size:14px;transition:.15s;
+}
+.success-again:hover{border-color:var(--mint);color:var(--dark);background:var(--tint)}
+
+/* ============ تسجيل دخول المشرف ============ */
+.login-card{max-width:420px;margin:60px auto 0}
+.login-icon{
+  width:64px;height:64px;border-radius:20px;margin:0 auto 18px;
+  background:var(--grad-hero);display:grid;place-items:center;color:#fff;box-shadow:var(--shadow-sm);
+}
+.login-icon svg{width:32px;height:32px}
+
+/* ============ لوحة الإدارة ============ */
+.admin-head{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin-bottom:22px;flex-wrap:wrap}
+.admin-head h2{font-size:25px;font-weight:800;letter-spacing:-.3px}
+.admin-head p{color:var(--text-soft);font-size:13.5px}
+.tabs{display:flex;gap:6px;background:var(--tint);padding:5px;border-radius:14px;border:1px solid var(--line)}
+.tab{
+  border:none;background:transparent;color:var(--text-soft);font-weight:700;font-size:13.5px;
+  padding:9px 18px;border-radius:10px;transition:.15s;display:inline-flex;align-items:center;gap:7px;
+}
+.tab svg{width:16px;height:16px}
+.tab.active{background:#fff;color:var(--dark);box-shadow:var(--shadow-sm)}
+
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px}
+.stat{
+  background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);padding:18px 20px;position:relative;overflow:hidden;
+}
+.stat::after{content:"";position:absolute;inset-inline-start:0;top:0;bottom:0;width:5px}
+.stat.s1::after{background:var(--grad-btn)}
+.stat.s2::after{background:var(--grad-btn-green)}
+.stat.s3::after{background:linear-gradient(135deg,#6FB92E,#25C5C2)}
+.stat.s4::after{background:linear-gradient(135deg,#53D6A1,#25C5C2)}
+.stat .ico{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;margin-bottom:12px}
+.stat .ico svg{width:20px;height:20px}
+.stat.s1 .ico{background:#e3f8f7;color:#0f8a87}
+.stat.s2 .ico{background:#eaf8ec;color:#4d8f1d}
+.stat.s3 .ico{background:#f0f8e9;color:#5d9b22}
+.stat.s4 .ico{background:#e6f9f0;color:#13a06f}
+.stat .num{font-size:30px;font-weight:800;letter-spacing:-.5px;line-height:1}
+.stat .lbl{font-size:13px;color:var(--text-soft);font-weight:600;margin-top:6px}
+
+.toolbar{
+  display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:16px;
+  background:#fff;border:1px solid var(--line);border-radius:var(--r-md);padding:14px 16px;
+}
+.search{position:relative;flex:1;min-width:200px}
+.search svg{position:absolute;right:14px;top:50%;transform:translateY(-50%);width:17px;height:17px;color:var(--text-mute)}
+.search input{width:100%;padding:11px 42px 11px 14px;border:1.5px solid var(--line);border-radius:var(--r-sm);font-size:14px;outline:none;transition:.15s}
+.search input:focus{border-color:var(--mint);box-shadow:0 0 0 4px rgba(83,214,161,.14)}
+.toolbar select{padding:11px 14px;border:1.5px solid var(--line);border-radius:var(--r-sm);font-size:14px;outline:none;background:#fff;font-weight:600;color:var(--text-soft);transition:.15s}
+.toolbar select:focus{border-color:var(--mint)}
+.btn-ghost{
+  border:1.5px solid var(--line);background:#fff;color:var(--text-soft);font-weight:700;font-size:13.5px;
+  padding:11px 16px;border-radius:var(--r-sm);display:inline-flex;align-items:center;gap:7px;transition:.15s;
+}
+.btn-ghost:hover{border-color:var(--mint);color:var(--dark);background:var(--tint)}
+.btn-ghost svg{width:16px;height:16px}
+
+.table-wrap{background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden}
+.tbl-scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:740px}
+thead th{
+  background:var(--tint);text-align:right;font-size:12.5px;font-weight:700;color:var(--text-soft);
+  padding:13px 16px;border-bottom:1px solid var(--line);white-space:nowrap;
+}
+tbody td{padding:14px 16px;border-bottom:1px solid #f0f5f1;font-size:13.5px;vertical-align:middle}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover{background:var(--tint2)}
+.avatar{
+  width:34px;height:34px;border-radius:11px;flex:none;display:grid;place-items:center;
+  color:#fff;font-weight:800;font-size:13px;background:var(--grad-btn);
+}
+.name-cell{display:flex;align-items:center;gap:11px}
+.name-cell b{font-weight:700;color:var(--dark)}
+.badge{
+  display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:999px;
+  font-size:12px;font-weight:700;white-space:nowrap;
+}
+.badge.g3{background:#e3f8f7;color:#0f8a87}
+.badge.g4{background:#eaf8ec;color:#4d8f1d}
+.badge.g5{background:#f0f8e9;color:#5d9b22}
+.badge.g6{background:#e6f9f0;color:#13a06f}
+.badge.ok{background:#eaf8ec;color:#4d8f1d}
+.mono{font-variant-numeric:tabular-nums;letter-spacing:.3px;color:var(--text-soft)}
+.row-del{
+  border:none;background:#fff5f3;color:#d9533f;width:32px;height:32px;border-radius:9px;
+  display:grid;place-items:center;transition:.15s;
+}
+.row-del:hover{background:#ffe9e4}
+.row-del svg{width:16px;height:16px}
+.empty{text-align:center;padding:54px 20px;color:var(--text-mute)}
+.empty svg{width:46px;height:46px;opacity:.4;margin-bottom:12px}
+.empty p{font-weight:600;font-size:14.5px}
+
+/* ============ إعدادات ============ */
+.settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.set-card{background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);padding:22px 24px}
+.set-card.col-2{grid-column:1 / -1}
+.set-card h4{font-size:16px;font-weight:800;display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.set-card h4 .si{width:30px;height:30px;border-radius:10px;display:grid;place-items:center;color:#fff;flex:none}
+.set-card h4 .si svg{width:16px;height:16px}
+.set-card>p{font-size:12.5px;color:var(--text-mute);margin-bottom:16px}
+.set-field{display:flex;flex-direction:column;gap:7px;margin-bottom:14px}
+.set-field label{font-size:13px;font-weight:700;color:var(--dark)}
+.set-field input,.set-field textarea{
+  padding:11px 14px;border:1.5px solid var(--line);border-radius:var(--r-sm);font-size:14px;outline:none;transition:.15s;
+}
+.set-field textarea{resize:vertical;min-height:90px}
+.set-field input:focus,.set-field textarea:focus{border-color:var(--mint);box-shadow:0 0 0 4px rgba(83,214,161,.14)}
+.img-preview{
+  width:100%;height:160px;border-radius:var(--r-md);overflow:hidden;background:var(--grad-soft);
+  border:1px solid var(--line);display:grid;place-items:center;margin-bottom:14px;
+}
+.img-preview img{width:100%;height:100%;object-fit:cover}
+.img-preview .ph{color:var(--text-mute);font-size:13px;font-weight:600;text-align:center}
+.img-preview .ph svg{width:34px;height:34px;display:block;margin:0 auto 6px;opacity:.5}
+.upload-row{display:flex;gap:10px;flex-wrap:wrap}
+.file-btn{
+  border:1.5px dashed #c2d6cb;background:var(--tint);color:var(--text-soft);font-weight:700;font-size:13px;
+  padding:10px 16px;border-radius:var(--r-sm);display:inline-flex;align-items:center;gap:7px;transition:.15s;
+}
+.file-btn:hover{border-color:var(--mint);color:var(--dark)}
+.file-btn svg{width:16px;height:16px}
+.save-btn{
+  border:none;color:#fff;font-weight:800;font-size:14px;padding:12px 22px;border-radius:var(--r-sm);
+  background:var(--grad-btn);display:inline-flex;align-items:center;gap:8px;transition:.15s;
+  box-shadow:0 10px 24px -12px rgba(37,197,194,.6);
+}
+.save-btn:hover{transform:translateY(-1px)}
+.save-btn svg{width:17px;height:17px}
+
+/* ============ توست ============ */
+.toast{
+  position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(20px);
+  background:var(--dark);color:#fff;padding:13px 22px;border-radius:14px;font-weight:700;font-size:14px;
+  display:flex;align-items:center;gap:9px;box-shadow:var(--shadow-lg);opacity:0;pointer-events:none;
+  transition:.3s;z-index:99;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast svg{width:18px;height:18px;color:var(--mint)}
+
+/* حالة المزامنة */
+.sync-pill{
+  display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:700;
+  padding:6px 13px;border-radius:999px;
+}
+.sync-pill.local{background:#fff4e6;color:#b87514}
+.sync-pill.cloud{background:#eaf8ec;color:#4d8f1d}
+.sync-pill svg{width:14px;height:14px}
+
+.hide{display:none!important}
+
+@media(max-width:720px){
+  .form-grid{grid-template-columns:1fr}
+  .field.col-2{grid-column:auto}
+  .stats{grid-template-columns:1fr 1fr}
+  .settings-grid{grid-template-columns:1fr}
+  .set-card.col-2{grid-column:auto}
+  .hero h2{font-size:24px}
+  .card{padding:24px 20px 28px}
+  .wrap{padding:22px 16px 60px}
+  .topbar-in{padding:12px 16px}
+}
+</style>
+</head>
+<body>
+
+<!-- ===================== الشريط العلوي ===================== -->
+<header class="topbar">
+  <div class="topbar-in">
+    <div class="brand">
+      <div class="logo" id="brandLogo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21 11-9-9-9 9"/><path d="M4 10v10a1 1 0 0 0 1 1h5v-6h4v6h5a1 1 0 0 0 1-1V10"/><path d="M9 21v-6"/></svg>
+      </div>
+      <div class="brand-txt">
+        <h1 id="brandName">برنامج الرحلة</h1>
+        <p id="brandSub">منصة التسجيل الإلكترونية</p>
+      </div>
+    </div>
+    <button class="nav-btn" id="navToggle" onclick="goAdmin()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+      <span id="navLabel">لوحة الإدارة</span>
+    </button>
+  </div>
+</header>
+
+<!-- ===================== واجهة المشاركين ===================== -->
+<main id="viewPublic" class="wrap wrap-narrow">
+
+  <!-- إعلان الرحلة -->
+  <section class="hero">
+    <div class="hero-media" id="heroMedia">
+      <div class="hero-overlay"></div>
+    </div>
+    <div class="hero-body">
+      <span class="hero-tag">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="m16.2 7.8-2 6.3-6.4 2 2-6.3z"/></svg>
+        <span id="heroTagTxt">رحلة جديدة</span>
+      </span>
+      <h2 id="heroTitle">رحلة المكتشفين الصغار</h2>
+      <p id="heroDesc">انطلاقة ممتعة مليئة بالأنشطة والمغامرات الآمنة لطلاب المرحلة الابتدائية. سجّل ابنك الآن وكن جزءًا من التجربة.</p>
+      <div class="hero-when" id="heroMeta">
+        <span class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg> التسجيل متاح الآن</span>
+        <span class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg> للمرحلة الابتدائية</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- نموذج التسجيل -->
+  <section class="card" id="formCard">
+    <div class="card-head">
+      <span class="eyebrow">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        بيانات التسجيل
+      </span>
+      <h3>تسجيل مشارك جديد</h3>
+      <p>عبّئ البيانات التالية بدقة، وسيتم قبول المشارك تلقائيًا بعد الإرسال.</p>
+    </div>
+
+    <form id="regForm" novalidate>
+      <div class="form-grid">
+
+        <div class="field col-2" data-name="participantName">
+          <label>اسم المشارك <span class="req">*</span></label>
+          <span class="hint">الاسم الثلاثي كاملًا</span>
+          <input type="text" name="participantName" placeholder="مثال: محمد عبدالله الأحمد" autocomplete="off" />
+          <span class="err-msg">الرجاء إدخال الاسم الثلاثي (ثلاث كلمات على الأقل)</span>
+        </div>
+
+        <div class="field" data-name="nationalId">
+          <label>رقم الهوية <span class="req">*</span></label>
+          <span class="hint">10 أرقام</span>
+          <input type="text" name="nationalId" inputmode="numeric" maxlength="10" placeholder="10xxxxxxxx" autocomplete="off" />
+          <span class="err-msg">رقم الهوية يجب أن يكون 10 أرقام</span>
+        </div>
+
+        <div class="field" data-name="grade">
+          <label>المرحلة الدراسية <span class="req">*</span></label>
+          <span class="hint">اختر الصف المناسب</span>
+          <select name="grade">
+            <option value="" disabled selected>— اختر —</option>
+            <option value="الصف الثالث الابتدائي">الصف الثالث الابتدائي (9 سنوات)</option>
+            <option value="الصف الرابع الابتدائي">الصف الرابع الابتدائي (10 سنوات)</option>
+            <option value="الصف الخامس الابتدائي">الصف الخامس الابتدائي (11 سنة)</option>
+            <option value="الصف السادس الابتدائي">الصف السادس الابتدائي (12 سنة)</option>
+          </select>
+          <span class="err-msg">الرجاء اختيار المرحلة الدراسية</span>
+        </div>
+
+        <div class="field" data-name="guardianPhone">
+          <label>جوال ولي الأمر <span class="req">*</span></label>
+          <span class="hint">الرقم الذي سيتابع المشارك — بصيغة 05xxxxxxxx</span>
+          <input type="tel" name="guardianPhone" inputmode="numeric" maxlength="10" placeholder="05xxxxxxxx" autocomplete="off" dir="ltr" style="text-align:right" />
+          <span class="err-msg">أدخل رقمًا صحيحًا يبدأ بـ 05 (10 أرقام)</span>
+        </div>
+
+        <div class="field" data-name="guardianPhone2">
+          <label>جوال آخر لولي الأمر</label>
+          <span class="hint">اختياري — بصيغة 05xxxxxxxx</span>
+          <input type="tel" name="guardianPhone2" inputmode="numeric" maxlength="10" placeholder="05xxxxxxxx" autocomplete="off" dir="ltr" style="text-align:right" />
+          <span class="err-msg">إن أُدخل، يجب أن يبدأ بـ 05 (10 أرقام)</span>
+        </div>
+
+        <div class="field col-2" data-name="notes">
+          <label>ملاحظات إضافية</label>
+          <span class="hint">اختياري — أي ملاحظة صحية أو غذائية تخص المشارك</span>
+          <textarea name="notes" placeholder="مثال: لديه حساسية من المكسرات..."></textarea>
+        </div>
+
+      </div>
+
+      <!-- التعهد -->
+      <div class="field pledge-field" data-name="pledge">
+        <div class="pledge">
+          <div class="pledge-row">
+            <div class="cbox" id="pledgeBox" role="checkbox" aria-checked="false" tabindex="0">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            </div>
+            <div class="pledge-txt">
+              <b>تعهّد المشارك <span class="req">*</span></b>
+              <span id="pledgeText">يتعهد المشارك بالالتزام بالتعاليم الإسلامية والآداب العامة والأنظمة. وفي حال عدم الالتزام، يحق لإدارة البرنامج استبعاد المشارك.</span>
+            </div>
+          </div>
+        </div>
+        <span class="err-msg" style="margin-top:8px">يجب الموافقة على التعهد للمتابعة</span>
+      </div>
+
+      <button type="submit" class="submit-btn" id="submitBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+        إرسال التسجيل
+      </button>
+    </form>
+  </section>
+
+  <!-- شاشة الشكر / القبول -->
+  <section class="card hide" id="successCard">
+    <div class="success">
+      <div class="success-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>
+      </div>
+      <h3>تم قبول المشارك بنجاح 🎉</h3>
+      <div class="name" id="successName">—</div>
+      <p class="msg" id="successMsg">شكرًا لتسجيلكم. تم استلام بيانات المشارك بنجاح وقبوله في البرنامج. سيتم التواصل معكم على رقم الجوال المسجّل بكل التفاصيل.</p>
+      <div class="ref">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 7h.01M7 12h10M7 17h10"/></svg>
+        رقم الطلب: <b id="successRef">—</b>
+      </div>
+      <br>
+      <button class="success-again" onclick="resetForm()">تسجيل مشارك آخر</button>
+    </div>
+  </section>
+
+</main>
+
+<!-- ===================== دخول المشرف ===================== -->
+<main id="viewLogin" class="wrap wrap-narrow hide">
+  <div class="card login-card">
+    <div class="login-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+    </div>
+    <div class="card-head" style="text-align:center;margin-bottom:18px">
+      <h3 style="font-size:21px">الدخول إلى لوحة الإدارة</h3>
+      <p>أدخل كلمة المرور للوصول إلى بيانات المسجّلين والإعدادات.</p>
+    </div>
+    <div class="set-field">
+      <label>كلمة المرور</label>
+      <input type="password" id="adminPass" placeholder="••••••••" onkeydown="if(event.key==='Enter')tryLogin()" />
+    </div>
+    <button class="save-btn" style="width:100%;justify-content:center;margin-top:6px" onclick="tryLogin()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><path d="m10 17 5-5-5-5M15 12H3"/></svg>
+      دخول
+    </button>
+    <p style="text-align:center;font-size:12px;color:var(--text-mute);margin-top:14px">كلمة المرور الافتراضية: <b>admin123</b> (يمكنك تغييرها من الكود)</p>
+    <button class="success-again" style="width:100%;margin-top:10px" onclick="goPublic()">العودة لصفحة التسجيل</button>
+  </div>
+</main>
+
+<!-- ===================== لوحة الإدارة ===================== -->
+<main id="viewAdmin" class="wrap hide">
+  <div class="admin-head">
+    <div>
+      <h2>لوحة التحكم</h2>
+      <p>إدارة المسجّلين، إعدادات الإعلان، ورسالة القبول</p>
+    </div>
+    <div class="tabs">
+      <button class="tab active" id="tabReg" onclick="switchTab('reg')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        المسجّلون
+      </button>
+      <button class="tab" id="tabSet" onclick="switchTab('set')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>
+        الإعدادات
+      </button>
+    </div>
+  </div>
+
+  <!-- تبويب المسجّلين -->
+  <div id="paneReg">
+    <div class="stats">
+      <div class="stat s1">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+        <div class="num" id="statTotal">0</div>
+        <div class="lbl">إجمالي المسجّلين</div>
+      </div>
+      <div class="stat s2">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m9 11 3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+        <div class="num" id="statAccepted">0</div>
+        <div class="lbl">مقبول</div>
+      </div>
+      <div class="stat s3">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></div>
+        <div class="num" id="statToday">0</div>
+        <div class="lbl">تسجيلات اليوم</div>
+      </div>
+      <div class="stat s4">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 3v18h18"/><path d="m7 16 4-4 3 3 5-6"/></svg></div>
+        <div class="num" id="statTopGrade">—</div>
+        <div class="lbl">الصف الأكثر تسجيلًا</div>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <div class="search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="text" id="searchInput" placeholder="بحث بالاسم أو رقم الهوية أو الجوال..." oninput="renderTable()" />
+      </div>
+      <select id="filterGrade" onchange="renderTable()">
+        <option value="">كل المراحل</option>
+        <option value="الصف الثالث الابتدائي">الصف الثالث الابتدائي</option>
+        <option value="الصف الرابع الابتدائي">الصف الرابع الابتدائي</option>
+        <option value="الصف الخامس الابتدائي">الصف الخامس الابتدائي</option>
+        <option value="الصف السادس الابتدائي">الصف السادس الابتدائي</option>
+      </select>
+      <button class="btn-ghost" onclick="exportCSV()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5M12 15V3"/></svg>
+        تصدير Excel
+      </button>
+      <button class="btn-ghost" onclick="loadFromCloud(true)" id="syncBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 2v6h-6M3 12a9 9 0 0 1 15-6.7L21 8M3 22v-6h6M21 12a9 9 0 0 1-15 6.7L3 16"/></svg>
+        تحديث
+      </button>
+      <span class="sync-pill local" id="syncPill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg> تخزين محلي</span>
+    </div>
+
+    <div class="table-wrap">
+      <div class="tbl-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>المشارك</th>
+              <th>رقم الهوية</th>
+              <th>المرحلة</th>
+              <th>جوال المتابعة</th>
+              <th>جوال آخر</th>
+              <th>التاريخ</th>
+              <th>الحالة</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+      <div class="empty hide" id="emptyState">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h3"/></svg>
+        <p>لا توجد تسجيلات مطابقة</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- تبويب الإعدادات -->
+  <div id="paneSet" class="hide">
+    <div class="settings-grid">
+
+      <!-- هوية البرنامج -->
+      <div class="set-card">
+        <h4><span class="si" style="background:var(--grad-btn)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m12 2 2.4 7.4H22l-6 4.6 2.3 7.4-6.3-4.6L5.7 21.4 8 14 2 9.4h7.6z"/></svg></span> هوية البرنامج</h4>
+        <p>الاسم الظاهر في أعلى الصفحة</p>
+        <div class="set-field">
+          <label>اسم البرنامج</label>
+          <input type="text" id="setBrandName" placeholder="برنامج الرحلة" />
+        </div>
+        <div class="set-field">
+          <label>العبارة الفرعية</label>
+          <input type="text" id="setBrandSub" placeholder="منصة التسجيل الإلكترونية" />
+        </div>
+        <button class="save-btn" onclick="saveBrand()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><path d="M17 21v-8H7v8M7 3v5h8"/></svg> حفظ</button>
+      </div>
+
+      <!-- رسالة القبول -->
+      <div class="set-card">
+        <h4><span class="si" style="background:var(--grad-btn-green)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span> رسالة الشكر والقبول</h4>
+        <p>تظهر لولي الأمر بعد إتمام التسجيل</p>
+        <div class="set-field">
+          <label>عنوان الرسالة</label>
+          <input type="text" id="setSuccessTitle" placeholder="تم قبول المشارك بنجاح" />
+        </div>
+        <div class="set-field">
+          <label>نص الرسالة</label>
+          <textarea id="setSuccessMsg" placeholder="شكرًا لتسجيلكم..."></textarea>
+        </div>
+        <button class="save-btn" onclick="saveSuccess()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><path d="M17 21v-8H7v8M7 3v5h8"/></svg> حفظ</button>
+      </div>
+
+      <!-- إعلان الرحلة -->
+      <div class="set-card col-2">
+        <h4><span class="si" style="background:linear-gradient(135deg,#6FB92E,#25C5C2)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.1-3.1a2 2 0 0 0-2.8 0L6 21"/></svg></span> إعلان الرحلة</h4>
+        <p>صورة الإعلان وعنوانه ووصفه — تظهر في أعلى صفحة التسجيل</p>
+
+        <div class="img-preview" id="setImgPreview">
+          <div class="ph">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.1-3.1a2 2 0 0 0-2.8 0L6 21"/></svg>
+            لم يتم اختيار صورة بعد
+          </div>
+        </div>
+        <div class="upload-row" style="margin-bottom:16px">
+          <label class="file-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M17 8l-5-5-5 5M12 3v12"/></svg>
+            رفع صورة من الجهاز
+            <input type="file" accept="image/*" style="display:none" onchange="onImgUpload(event)" />
+          </label>
+          <button class="file-btn" onclick="clearImg()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg> إزالة الصورة</button>
+        </div>
+
+        <div class="settings-grid" style="margin-bottom:16px">
+          <div class="set-field" style="margin:0">
+            <label>شارة الإعلان (نص صغير أعلى العنوان)</label>
+            <input type="text" id="setHeroTag" placeholder="رحلة جديدة" />
+          </div>
+          <div class="set-field" style="margin:0">
+            <label>عنوان الإعلان</label>
+            <input type="text" id="setHeroTitle" placeholder="رحلة المكتشفين الصغار" />
+          </div>
+        </div>
+        <div class="set-field">
+          <label>وصف الإعلان</label>
+          <textarea id="setHeroDesc" placeholder="اكتب وصفًا مختصرًا للرحلة..."></textarea>
+        </div>
+        <button class="save-btn" onclick="saveHero()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><path d="M17 21v-8H7v8M7 3v5h8"/></svg> حفظ إعلان الرحلة</button>
+      </div>
+
+      <!-- ربط جوجل شيت -->
+      <div class="set-card col-2">
+        <h4><span class="si" style="background:linear-gradient(135deg,#53D6A1,#25C5C2)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h8M8 9h2"/></svg></span> الربط مع Google Sheets</h4>
+        <p>الصق رابط تطبيق Apps Script ليتم حفظ التسجيلات تلقائيًا في جوجل شيت (الخطوات في ملف الإرشادات)</p>
+        <div class="set-field">
+          <label>رابط Apps Script Web App</label>
+          <input type="text" id="setSheetUrl" dir="ltr" style="text-align:left" placeholder="https://script.google.com/macros/s/XXXX/exec" />
+        </div>
+        <button class="save-btn" onclick="saveSheetUrl()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 17H7A5 5 0 0 1 7 7h2M15 7h2a5 5 0 0 1 0 10h-2M8 12h8"/></svg> حفظ الرابط وتفعيل المزامنة</button>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<!-- توست -->
+<div class="toast" id="toast">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg>
+  <span id="toastMsg">تم الحفظ</span>
+</div>
+
+<script>
+/* =========================================================
+   منصة التسجيل — المنطق البرمجي
+   ========================================================= */
+
+const ADMIN_PASSWORD = "admin123"; // ← غيّر كلمة المرور من هنا
+
+const DEFAULTS = {
+  brandName:"برنامج الرحلة",
+  brandSub:"منصة التسجيل الإلكترونية",
+  heroTag:"رحلة جديدة",
+  heroTitle:"رحلة المكتشفين الصغار",
+  heroDesc:"انطلاقة ممتعة مليئة بالأنشطة والمغامرات الآمنة لطلاب المرحلة الابتدائية. سجّل ابنك الآن وكن جزءًا من التجربة.",
+  heroImg:"",
+  successTitle:"تم قبول المشارك بنجاح 🎉",
+  successMsg:"شكرًا لتسجيلكم. تم استلام بيانات المشارك بنجاح وقبوله في البرنامج. سيتم التواصل معكم على رقم الجوال المسجّل بكل التفاصيل.",
+  sheetUrl:""
+};
+
+const K_SETTINGS="trip_settings_v1";
+const K_REGS="trip_registrations_v1";
+
+let settings = loadSettings();
+let registrations = loadRegs();
+let pledgeOk = false;
+
+/* ---------- التخزين ---------- */
+function loadSettings(){
+  try{ return Object.assign({}, DEFAULTS, JSON.parse(localStorage.getItem(K_SETTINGS)||"{}")); }
+  catch(e){ return Object.assign({}, DEFAULTS); }
+}
+function saveSettings(){ localStorage.setItem(K_SETTINGS, JSON.stringify(settings)); }
+function loadRegs(){
+  try{ return JSON.parse(localStorage.getItem(K_REGS)||"[]"); }catch(e){ return []; }
+}
+function saveRegs(){ localStorage.setItem(K_REGS, JSON.stringify(registrations)); }
+
+/* ---------- تطبيق الإعدادات على الواجهة ---------- */
+function applySettings(){
+  document.getElementById('brandName').textContent = settings.brandName;
+  document.getElementById('brandSub').textContent = settings.brandSub;
+  document.getElementById('heroTagTxt').textContent = settings.heroTag;
+  document.getElementById('heroTitle').textContent = settings.heroTitle;
+  document.getElementById('heroDesc').textContent = settings.heroDesc;
+  document.title = settings.brandName + " — التسجيل";
+
+  const media = document.getElementById('heroMedia');
+  media.querySelectorAll('img').forEach(i=>i.remove());
+  if(settings.heroImg){
+    const img=document.createElement('img');
+    img.src=settings.heroImg; img.alt="إعلان الرحلة";
+    media.insertBefore(img, media.firstChild);
+  }
+  updateSyncPill();
+}
+function updateSyncPill(){
+  const pill=document.getElementById('syncPill');
+  if(!pill) return;
+  if(settings.sheetUrl){
+    pill.className="sync-pill cloud";
+    pill.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg> مزامنة سحابية';
+  }else{
+    pill.className="sync-pill local";
+    pill.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg> تخزين محلي';
+  }
+}
+
+/* ---------- التنقل بين الواجهات ---------- */
+function show(id){
+  ['viewPublic','viewLogin','viewAdmin'].forEach(v=>document.getElementById(v).classList.add('hide'));
+  document.getElementById(id).classList.remove('hide');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+let isAdmin=false;
+function goAdmin(){
+  if(isAdmin){ show('viewAdmin'); document.getElementById('navLabel').textContent='صفحة التسجيل'; }
+  else { show('viewLogin'); }
+}
+function goPublic(){
+  show('viewPublic');
+  document.getElementById('navLabel').textContent='لوحة الإدارة';
+}
+function tryLogin(){
+  const p=document.getElementById('adminPass').value;
+  if(p===ADMIN_PASSWORD){
+    isAdmin=true;
+    document.getElementById('adminPass').value="";
+    enterAdmin();
+  }else{
+    toast('كلمة المرور غير صحيحة', true);
+  }
+}
+function enterAdmin(){
+  show('viewAdmin');
+  document.getElementById('navLabel').textContent='صفحة التسجيل';
+  fillSettingsForm();
+  refreshAdmin();
+  loadFromCloud(false);
+}
+
+/* تبديل زر التنقل ليعمل ذهابًا وإيابًا */
+function navHandler(){
+  const adminVisible=!document.getElementById('viewAdmin').classList.contains('hide');
+  if(adminVisible){ goPublic(); }
+  else { goAdmin(); }
+}
+document.getElementById('navToggle').onclick = navHandler;
+
+/* ---------- تبويبات الإدارة ---------- */
+function switchTab(t){
+  document.getElementById('tabReg').classList.toggle('active', t==='reg');
+  document.getElementById('tabSet').classList.toggle('active', t==='set');
+  document.getElementById('paneReg').classList.toggle('hide', t!=='reg');
+  document.getElementById('paneSet').classList.toggle('hide', t!=='set');
+}
+
+/* ---------- التحقق من الحقول ---------- */
+function setError(name, on){
+  const f=document.querySelector(`.field[data-name="${name}"]`);
+  if(f) f.classList.toggle('invalid', on);
+}
+function validate(data){
+  let ok=true;
+  // الاسم الثلاثي
+  const words=(data.participantName||"").trim().split(/\s+/).filter(Boolean);
+  if(words.length<3){ setError('participantName',true); ok=false; } else setError('participantName',false);
+  // الهوية 10 أرقام
+  if(!/^\d{10}$/.test(data.nationalId||"")){ setError('nationalId',true); ok=false; } else setError('nationalId',false);
+  // المرحلة
+  if(!data.grade){ setError('grade',true); ok=false; } else setError('grade',false);
+  // جوال 1
+  if(!/^05\d{8}$/.test(data.guardianPhone||"")){ setError('guardianPhone',true); ok=false; } else setError('guardianPhone',false);
+  // جوال 2 اختياري لكن إن وُجد يُتحقق منه
+  if(data.guardianPhone2 && !/^05\d{8}$/.test(data.guardianPhone2)){ setError('guardianPhone2',true); ok=false; } else setError('guardianPhone2',false);
+  // التعهد
+  if(!pledgeOk){ setError('pledge',true); ok=false; } else setError('pledge',false);
+  return ok;
+}
+
+/* تقييد الأرقام فقط في حقول الأرقام */
+['nationalId','guardianPhone','guardianPhone2'].forEach(n=>{
+  document.querySelector(`input[name="${n}"]`).addEventListener('input',e=>{
+    e.target.value=e.target.value.replace(/\D/g,'');
+  });
+});
+
+/* التعهد */
+const pledgeBox=document.getElementById('pledgeBox');
+function togglePledge(){
+  pledgeOk=!pledgeOk;
+  pledgeBox.classList.toggle('on',pledgeOk);
+  pledgeBox.setAttribute('aria-checked',pledgeOk);
+  if(pledgeOk) setError('pledge',false);
+}
+pledgeBox.addEventListener('click',togglePledge);
+pledgeBox.addEventListener('keydown',e=>{ if(e.key===' '||e.key==='Enter'){e.preventDefault();togglePledge();} });
+
+/* ---------- إرسال النموذج ---------- */
+document.getElementById('regForm').addEventListener('submit', async function(e){
+  e.preventDefault();
+  const fd=new FormData(this);
+  const data={
+    participantName:(fd.get('participantName')||"").trim(),
+    nationalId:(fd.get('nationalId')||"").trim(),
+    grade:fd.get('grade')||"",
+    guardianPhone:(fd.get('guardianPhone')||"").trim(),
+    guardianPhone2:(fd.get('guardianPhone2')||"").trim(),
+    notes:(fd.get('notes')||"").trim()
+  };
+  if(!validate(data)){
+    const firstErr=document.querySelector('.field.invalid');
+    if(firstErr) firstErr.scrollIntoView({behavior:'smooth',block:'center'});
+    return;
+  }
+
+  const btn=document.getElementById('submitBtn');
+  btn.disabled=true; btn.innerHTML='جارٍ الإرسال...';
+
+  const record={
+    id:'REG-'+Date.now().toString(36).toUpperCase().slice(-6),
+    ts:new Date().toISOString(),
+    ...data,
+    pledge:'موافق',
+    status:'مقبول'
+  };
+
+  // حفظ سحابي إن توفر الرابط
+  let cloudOk=true;
+  if(settings.sheetUrl){
+    cloudOk=await sendToSheet(record);
+  }
+
+  registrations.unshift(record);
+  saveRegs();
+
+  // عرض شاشة القبول
+  document.getElementById('successName').textContent=record.participantName;
+  document.getElementById('successRef').textContent=record.id;
+  document.getElementById('formCard').classList.add('hide');
+  document.getElementById('successCard').classList.remove('hide');
+  document.getElementById('successCard').querySelector('h3').textContent=settings.successTitle;
+  document.getElementById('successMsg').textContent=settings.successMsg;
+  window.scrollTo({top:0,behavior:'smooth'});
+
+  btn.disabled=false;
+  btn.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg> إرسال التسجيل';
+});
+
+function resetForm(){
+  document.getElementById('regForm').reset();
+  pledgeOk=false; pledgeBox.classList.remove('on'); pledgeBox.setAttribute('aria-checked','false');
+  document.querySelectorAll('.field.invalid').forEach(f=>f.classList.remove('invalid'));
+  document.getElementById('successCard').classList.add('hide');
+  document.getElementById('formCard').classList.remove('hide');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ---------- الربط مع Google Sheets ---------- */
+async function sendToSheet(record){
+  try{
+    await fetch(settings.sheetUrl,{
+      method:'POST',
+      mode:'no-cors',
+      headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body:JSON.stringify({action:'register', record})
+    });
+    return true;
+  }catch(err){ console.warn('Sheet sync failed', err); return false; }
+}
+async function loadFromCloud(showMsg){
+  if(!settings.sheetUrl){ if(showMsg) toast('لم يتم ربط جوجل شيت بعد', true); return; }
+  try{
+    const res=await fetch(settings.sheetUrl+'?action=list');
+    const json=await res.json();
+    if(Array.isArray(json.records)){
+      registrations=json.records;
+      saveRegs();
+      refreshAdmin();
+      if(showMsg) toast('تم تحديث البيانات من جوجل شيت');
+    }
+  }catch(err){
+    if(showMsg) toast('تعذّر الاتصال بجوجل شيت', true);
+  }
+}
+
+/* ---------- لوحة الإدارة ---------- */
+function refreshAdmin(){ updateStats(); renderTable(); }
+
+function updateStats(){
+  const total=registrations.length;
+  document.getElementById('statTotal').textContent=total;
+  document.getElementById('statAccepted').textContent=registrations.filter(r=>r.status==='مقبول').length;
+  const today=new Date().toDateString();
+  document.getElementById('statToday').textContent=registrations.filter(r=> new Date(r.ts).toDateString()===today).length;
+  // الأكثر تسجيلًا
+  const counts={};
+  registrations.forEach(r=>{ counts[r.grade]=(counts[r.grade]||0)+1; });
+  let top="—",max=0;
+  Object.entries(counts).forEach(([g,c])=>{ if(c>max){max=c;top=g;} });
+  document.getElementById('statTopGrade').textContent = top==="—" ? "—" : top.replace('الصف ','').replace(' الابتدائي','');
+}
+
+function gradeClass(g){
+  if(g.includes('الثالث'))return 'g3';
+  if(g.includes('الرابع'))return 'g4';
+  if(g.includes('الخامس'))return 'g5';
+  return 'g6';
+}
+function gradeShort(g){ return g.replace('الصف ','').replace(' الابتدائي',''); }
+function initials(name){
+  const w=name.trim().split(/\s+/);
+  return ((w[0]||'')[0]||'')+((w[1]||'')[0]||'');
+}
+function fmtDate(iso){
+  const d=new Date(iso);
+  return d.toLocaleDateString('ar-SA-u-nu-latn',{year:'numeric',month:'2-digit',day:'2-digit'})+
+    ' • '+d.toLocaleTimeString('ar-SA-u-nu-latn',{hour:'2-digit',minute:'2-digit'});
+}
+
+function renderTable(){
+  const q=(document.getElementById('searchInput').value||"").trim();
+  const gf=document.getElementById('filterGrade').value;
+  const body=document.getElementById('tableBody');
+  let list=registrations.filter(r=>{
+    const matchQ=!q || (r.participantName+r.nationalId+r.guardianPhone+(r.guardianPhone2||'')).includes(q);
+    const matchG=!gf || r.grade===gf;
+    return matchQ && matchG;
+  });
+  document.getElementById('emptyState').classList.toggle('hide', list.length>0);
+  body.innerHTML=list.map(r=>`
+    <tr>
+      <td><div class="name-cell"><div class="avatar">${initials(r.participantName)}</div><b>${esc(r.participantName)}</b></div></td>
+      <td class="mono">${esc(r.nationalId)}</td>
+      <td><span class="badge ${gradeClass(r.grade)}">${esc(gradeShort(r.grade))}</span></td>
+      <td class="mono">${esc(r.guardianPhone)}</td>
+      <td class="mono">${esc(r.guardianPhone2||'—')}</td>
+      <td style="color:var(--text-mute);font-size:12.5px;white-space:nowrap">${fmtDate(r.ts)}</td>
+      <td><span class="badge ok"><svg style="width:12px;height:12px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg>${esc(r.status||'مقبول')}</span></td>
+      <td><button class="row-del" title="حذف" onclick="delReg('${r.id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg></button></td>
+    </tr>`).join('');
+}
+function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+function delReg(id){
+  if(!confirm('هل تريد حذف هذا التسجيل؟')) return;
+  registrations=registrations.filter(r=>r.id!==id);
+  saveRegs(); refreshAdmin();
+  toast('تم حذف التسجيل');
+}
+
+/* ---------- تصدير CSV (Excel) ---------- */
+function exportCSV(){
+  if(registrations.length===0){ toast('لا توجد بيانات للتصدير', true); return; }
+  const headers=['رقم الطلب','اسم المشارك','رقم الهوية','المرحلة','جوال المتابعة','جوال آخر','ملاحظات','التعهد','الحالة','التاريخ'];
+  const rows=registrations.map(r=>[
+    r.id,r.participantName,r.nationalId,r.grade,r.guardianPhone,r.guardianPhone2||'',r.notes||'',r.pledge||'موافق',r.status||'مقبول',
+    new Date(r.ts).toLocaleString('ar-SA-u-nu-latn')
+  ]);
+  let csv='\uFEFF'+headers.join(',')+'\n';
+  rows.forEach(row=>{ csv+=row.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')+'\n'; });
+  const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='المسجلون-'+new Date().toISOString().slice(0,10)+'.csv';
+  a.click();
+  toast('تم تصدير ملف Excel');
+}
+
+/* ---------- نماذج الإعدادات ---------- */
+function fillSettingsForm(){
+  setBrandName.value=settings.brandName;
+  setBrandSub.value=settings.brandSub;
+  setHeroTag.value=settings.heroTag;
+  setHeroTitle.value=settings.heroTitle;
+  setHeroDesc.value=settings.heroDesc;
+  setSuccessTitle.value=settings.successTitle;
+  setSuccessMsg.value=settings.successMsg;
+  setSheetUrl.value=settings.sheetUrl;
+  renderImgPreview();
+}
+function renderImgPreview(){
+  const p=document.getElementById('setImgPreview');
+  if(settings.heroImg){
+    p.innerHTML=`<img src="${settings.heroImg}" alt="معاينة">`;
+  }else{
+    p.innerHTML=`<div class="ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.1-3.1a2 2 0 0 0-2.8 0L6 21"/></svg>لم يتم اختيار صورة بعد</div>`;
+  }
+}
+function saveBrand(){
+  settings.brandName=setBrandName.value.trim()||DEFAULTS.brandName;
+  settings.brandSub=setBrandSub.value.trim()||DEFAULTS.brandSub;
+  saveSettings(); applySettings(); toast('تم حفظ هوية البرنامج');
+}
+function saveHero(){
+  settings.heroTag=setHeroTag.value.trim()||DEFAULTS.heroTag;
+  settings.heroTitle=setHeroTitle.value.trim()||DEFAULTS.heroTitle;
+  settings.heroDesc=setHeroDesc.value.trim()||DEFAULTS.heroDesc;
+  saveSettings(); applySettings(); toast('تم حفظ إعلان الرحلة');
+}
+function saveSuccess(){
+  settings.successTitle=setSuccessTitle.value.trim()||DEFAULTS.successTitle;
+  settings.successMsg=setSuccessMsg.value.trim()||DEFAULTS.successMsg;
+  saveSettings(); toast('تم حفظ رسالة القبول');
+}
+function saveSheetUrl(){
+  settings.sheetUrl=setSheetUrl.value.trim();
+  saveSettings(); applySettings();
+  toast(settings.sheetUrl?'تم تفعيل المزامنة السحابية':'تم إيقاف المزامنة');
+}
+function onImgUpload(e){
+  const file=e.target.files[0]; if(!file) return;
+  if(file.size>2.5*1024*1024){ toast('حجم الصورة كبير (الحد 2.5MB)', true); return; }
+  const reader=new FileReader();
+  reader.onload=()=>{ settings.heroImg=reader.result; saveSettings(); renderImgPreview(); applySettings(); toast('تم تحديث صورة الإعلان'); };
+  reader.readAsDataURL(file);
+}
+function clearImg(){ settings.heroImg=""; saveSettings(); renderImgPreview(); applySettings(); toast('تمت إزالة الصورة'); }
+
+/* ---------- توست ---------- */
+let toastT;
+function toast(msg, isErr){
+  const t=document.getElementById('toast');
+  document.getElementById('toastMsg').textContent=msg;
+  t.querySelector('svg').style.color = isErr ? '#ff8b7a' : 'var(--mint)';
+  t.classList.add('show');
+  clearTimeout(toastT);
+  toastT=setTimeout(()=>t.classList.remove('show'),2600);
+}
+
+/* ---------- تشغيل ---------- */
+applySettings();
+</script>
+</body>
+</html>
