@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>محاكي اختبار PMP</title>
 <meta name="claude:viewport-fit-sides" content="cover">
+<link rel="icon" id="favicon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231D4A73'/%3E%3Ctext x='32' y='46' font-size='38' font-weight='700' text-anchor='middle' fill='white' font-family='Arial,sans-serif'%3EP%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Readex+Pro:wght@500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
@@ -92,6 +93,8 @@ p{margin:0}
   padding-right:max(16px, env(safe-area-inset-right, 0px));
 }
 .band .wrap{padding-block:34px 92px}
+.brand-logo{display:block;max-height:52px;max-width:200px;width:auto;margin-bottom:14px}
+.xbar .brand-logo{display:inline-block;max-height:30px;max-width:120px;margin:0 0 0 12px;vertical-align:middle}
 .eyebrow{font-size:13px;letter-spacing:.04em;opacity:.8;font-weight:600}
 .band h1{font-size:clamp(28px,4.6vw,42px);font-weight:700;margin-top:6px}
 .band p.lead{font-size:17px;opacity:.88;margin-top:8px;max-width:60ch}
@@ -582,6 +585,8 @@ function paintTimer(){
 
 /* ================= العرض ================= */
 const root=$('#root');
+function logoHtml(){ return CFG.logo ? `<img class="brand-logo" src="${esc(CFG.logo)}" alt="" onerror="this.remove()">` : ''; }
+if(CFG.logo){ const f=$('#favicon'); if(f) f.href=CFG.logo; }
 function render(){
   if(!S || S.phase==='home') return renderHome();
   ({tutorial:renderTutorial,nda:renderNda,exam:renderExam,review:renderReview,break:renderBreak,results:renderResults}[S.phase]||renderHome)();
@@ -590,7 +595,7 @@ function render(){
 function xbar(extra){
   const total=S.qids.length;
   return `<header class="xbar">
-    <div class="x-title">${esc(CFG.siteName||'محاكي اختبار PMP')}<small>${esc(S.name)} · ${esc(S.modeLabel)}</small></div>
+    <div class="x-title">${logoHtml()}<span style="display:inline-block;vertical-align:middle">${esc(CFG.siteName||'محاكي اختبار PMP')}<small>${esc(S.name)} · ${esc(S.modeLabel)}</small></span></div>
     <div class="x-info">${extra||''}</div>
   </header>`;
 }
@@ -614,6 +619,7 @@ function renderHome(){
     : saved && saved.phase==='results' ? `<div class="resume"><p>نتيجتك الأخيرة جاهزة: ${saved.result?saved.result.pct:0}%.</p><button class="btn btn-primary" id="lastResBtn" type="button">عرض تقرير الأداء</button></div>` : '';
   root.innerHTML = `<div class="page">
     <section class="band"><div class="wrap">
+      ${logoHtml()}
       <div class="eyebrow">Project Management Professional · صيغة 2026</div>
       <h1>${esc(CFG.siteName||'محاكي اختبار PMP')}</h1>
       <p class="lead">${esc(CFG.tagline||'')}</p>
