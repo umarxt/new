@@ -1,3 +1,5 @@
-# إعدادات Netlify: الموقع المنشور هو مجلد pmp فقط (لا يوجد بناء)
+# إعدادات Netlify: الموقع المنشور هو مجلد pmp فقط
 [build]
   publish = "pmp"
+  # يضع رابط Google Sheets من متغيري البيئة SHEET_URL و SHEET_TOKEN (إن وُجدا)
+  command = "node pmp/src/inject-config.js"
