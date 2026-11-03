@@ -518,13 +518,36 @@ function computeResult(){
 }
 
 /* ================= الحفظ في السجل ================= */
+/* ================= إرسال النتيجة إلى Google Sheets (اختياري) ================= */
+const K_OUTBOX='pmp-sim-outbox-v1';
+function sheetOn(){ return /^https:\/\//.test(CFG.sheetUrl||''); }
+function postToSheet(payload){
+  /* نص عادي بدون ترويسات خاصة حتى لا يحتاج المتصفح إلى طلب تحقق مسبق من جوجل */
+  return fetch(CFG.sheetUrl,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload),keepalive:true});
+}
+function queueResult(p){ const b=store.get(K_OUTBOX)||[]; b.push(p); store.set(K_OUTBOX,b.slice(-20)); }
+function buildPayload(){
+  const R=S.result, per={};
+  Object.keys(DOMAINS).forEach(k=>{const d=R.per[k]; per[k]=d&&d.total?d.correct+'/'+d.total:'—'});
+  return {token:CFG.sheetToken||'',sid:String(S.started),time:new Date(S.finished).toISOString(),name:S.name,mode:S.modeLabel,
+    total:R.total,correct:R.correct,pct:R.pct,result:R.pass?'ناجح':'غير ناجح',level:ratingFor(R.pct).label,
+    seconds:R.timeUsed,ended:S.endReason,people:per.people,process:per.process,business:per.business,
+    wrong:S.qids.filter(id=>!isCorrect(QMAP[id],S.answers[id])).join(' ')};
+}
+function submitResult(){ if(!sheetOn()) return; const p=buildPayload(); postToSheet(p).catch(()=>queueResult(p)); }
+function flushOutbox(){
+  if(!sheetOn()) return; const box=store.get(K_OUTBOX)||[]; if(!box.length) return; store.del(K_OUTBOX);
+  box.forEach(p=>postToSheet(p).catch(()=>queueResult(p)));
+}
+window.addEventListener('online',flushOutbox);
+
 function finishExam(reason){
   S.endReason=reason; S.finished=Date.now(); S.phase='results'; S.nav=null;
   S.result=computeResult();
   const h=store.get(K_HIST)||[];
   h.unshift({t:S.finished,name:S.name,mode:S.modeLabel,total:S.result.total,correct:S.result.correct,pct:S.result.pct,pass:S.result.pass,time:S.result.timeUsed});
   store.set(K_HIST,h.slice(0,30));
-  ui.resFilter='all'; ui.resDomain='all'; closeCalc(); save(); render();
+  ui.resFilter='all'; ui.resDomain='all'; closeCalc(); save(); render(); submitResult();
   if(reason==='time') toast('انتهى وقت الاختبار، وتم تسليم إجاباتك');
 }
 
@@ -603,6 +626,7 @@ function renderHome(){
           <div class="field"><label for="stName">اسم المتدرب</label>
             <input class="input" id="stName" autocomplete="name" placeholder="اكتب اسمك كما تريد أن يظهر في التقرير" value="${esc(name)}"></div>
           ${ui.homeErr?`<p class="err" role="alert">${esc(ui.homeErr)}</p>`:''}
+          ${sheetOn()?`<p class="note" style="margin:-8px 0 16px">عند إنهاء الاختبار يُرسل اسمك ونتيجتك تلقائيًا إلى المدرّب.</p>`:''}
           <div class="field" style="margin-bottom:8px"><label>نوع الاختبار</label></div>
           <div class="modes">${MODES.map(m=>{const n=Math.min(m.count,BANK.length);const mins=Math.round(perQ*n);return `
             <label class="mode"><input type="radio" name="mode" id="mode-${esc(m.id)}" value="${esc(m.id)}" ${m.id===selMode?'checked':''}>
@@ -941,6 +965,7 @@ function renderResults(){
         <div class="stat"><b class="num">${R.flagged}</b><span>أسئلة معلّمة</span></div>
         <div class="stat"><b class="num">${fmtDur(R.timeUsed)}</b><span>الوقت المستخدم من ${fmtDur(S.total)}</span></div>
       </div>
+      ${sheetOn()?`<p class="note">أُرسلت نتيجتك إلى المدرّب تلقائيًا.</p>`:''}
       <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:20px">
         <button class="btn btn-primary" id="resNew" type="button">اختبار جديد</button>
         <button class="btn" id="resHome" type="button">الصفحة الرئيسية</button>
@@ -1070,6 +1095,7 @@ document.addEventListener('keydown',e=>{
 
 /* عند فتح الصفحة تظهر الرئيسية دائمًا، مع خيار متابعة الاختبار المحفوظ أو عرض آخر نتيجة */
 S=null;
+flushOutbox();
 render();
 })();
 </script>
